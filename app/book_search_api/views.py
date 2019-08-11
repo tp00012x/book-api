@@ -4,6 +4,7 @@ import requests
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from app.services import APIServices
 
 
 class BookSearchApiView(APIView):
@@ -15,7 +16,7 @@ class BookSearchApiView(APIView):
 
         if query_params:
             try:
-                response = self._open_library_response(**query_params)
+                response = APIServices.get_books(**query_params)
             except requests.exceptions.RequestException:
                 # Return response with error message and 503 status code
                 # letting the user know that the service is unavailable.
@@ -28,9 +29,8 @@ class BookSearchApiView(APIView):
                     status=status.HTTP_503_SERVICE_UNAVAILABLE
                 )
 
-            # After getting the response successfully. We convert it into a
-            # Python dictionary
-            parsed_response = self._parse_response(response)
+            # Convert response object to Python dictionary
+            parsed_response = json.loads(response.text)
 
             # A response is sent containing a list of dictionary books that 'I
             # think' include the most relevant information for a book search.
@@ -66,21 +66,3 @@ class BookSearchApiView(APIView):
             books.append(book_data)
 
         return books
-
-    @staticmethod
-    def _open_library_response(
-            **query_params: list) -> requests.models.Response:
-        """
-        Make request to open library api and return response.
-        """
-        open_library_url = 'http://openlibrary.org/search.json'
-        response = requests.get(open_library_url, params=query_params)
-
-        return response
-
-    @staticmethod
-    def _parse_response(response: requests.models.Response) -> dict:
-        """
-        Parse response to python dictionary.
-        """
-        return json.loads(response.text)
