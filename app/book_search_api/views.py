@@ -55,7 +55,7 @@ class BookSearchApiView(APIView):
         for book in parsed_response['docs']:
             book_data = {
                 # After inspecting the response from open library, I will be
-                # the "key"  to uniquely identify each book.
+                # using the "key" to uniquely identify each book.
                 'key': book.get('key').strip('/works/'),
                 'title': book.get('title'),
                 'open_library_url': "https://openlibrary.org{}".format(

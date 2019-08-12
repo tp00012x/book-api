@@ -72,7 +72,7 @@ class WishListViewSet(viewsets.ModelViewSet):
 
         # We use the .get method to avoid getting an error if the key doesn't
         # exist in the parsed response. WishList was modeled in a way that any
-        # of these values can be null except of ol_id.
+        # of these values can be null except for ol_id.
         serializer.save(
             title=parsed_response.get('title'),
             publish_date=parsed_response.get('publish_date'),

@@ -9,5 +9,5 @@ router.register('wish-list', WishListViewSet, base_name='wish-list')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('api/book_search/', include('book_search_api.urls'))
+    path('api/book-search/', include('book_search_api.urls'))
 ]
